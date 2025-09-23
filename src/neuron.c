@@ -6,7 +6,7 @@ double sigmoid(double x)
     return 1 / (1 + exp(-x));
 }
 
-double sigmoid_derivate(double x)
+double sigmoid_derivative(double x)
 {
     double s = sigmoid(x);
     return s * (1.0 - s);

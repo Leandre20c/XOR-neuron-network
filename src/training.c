@@ -9,18 +9,36 @@ void train_single_example(XORNetwork* net, XORExample example, double
 {
     double A = example.input[0];
     double B = example.input[1];
+
+    // Forward pass
     double res = forward_pass(net, A, B);
 
+    // Calcul of exit error
     double error = example.expected - res;
 
-    // Ajust output weigts
-    net->output_weights[0] += learning_rate * error * net->hidden_output[0];
-    net->output_weights[1] += learning_rate * error * net->hidden_output[1];
-    net->output_bias += learning_rate * error * 1.0;
+    // == Back propagation ==
 
-    // Ajust hidden layer
-    double hidden_error_1 = error * net->output_weights[0];
-    double hidden_error_2 = error * net->output_weights[1];
+    // Exit layer delta
+    double output_error = error * sigmoid_derivative(net->output);
+
+    // Save old weigths
+    double old_output_weights[2];
+    old_output_weights[0] = net->output_weights[0];
+    old_output_weights[1] = net->output_weights[1];
+
+    // Ajust output weigts
+    net->output_weights[0] += learning_rate * output_error * net->hidden_output[0];
+    net->output_weights[1] += learning_rate * output_error * net->hidden_output[1];
+    net->output_bias += learning_rate * output_error * 1.0;
+
+    
+    // == Ajust Hidden Layer
+
+    double hidden_error_1 = output_error * old_output_weights[0] *
+        sigmoid_derivative(net->hidden_output[0]);
+
+    double hidden_error_2 = output_error * old_output_weights[1] *
+        sigmoid_derivative(net->hidden_output[1]); 
 
     // neuron 1
     net->hidden_weights[0][0] += learning_rate * hidden_error_1 * A;  // w to A
@@ -56,7 +74,7 @@ void train_xor_network(XORNetwork* net, int epochs, double learning_rate,
 
         if (verbose && epoch % 1000 == 0) {
             double cost = compute_network_cost(net);
-            printf("Époque %d, Coût: %.6f\n", epoch, cost);
+            printf("Epoch %d, Cost: %.6f\n", epoch, cost);
         }
     }
 
@@ -95,9 +113,9 @@ void save_network(XORNetwork* net, const char* filename)
 int load_network(XORNetwork* net, const char* filename)
 {
     FILE* file = fopen(filename, "rb");
-    if (file == NULL) return 0;  // Échec
+    if (file == NULL) return 0;
     
     fread(net, sizeof(XORNetwork), 1, file);
     fclose(file);
-    return 1;  // Succès
+    return 1;
 }
