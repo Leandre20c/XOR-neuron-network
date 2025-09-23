@@ -16,16 +16,16 @@ XORNetwork* create_xor_network()
 
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
-            net->hidden_weights[i][j] = ((double)rand() / RAND_MAX) * 2.0 - 1.0;
+            net->hidden_weights[i][j] = ((double)rand() / RAND_MAX) * 0.5 - 0.25;
         }
-        net->hidden_bias[i] = ((double)rand() / RAND_MAX) * 2.0 - 1.0;
+        net->hidden_bias[i] = ((double)rand() / RAND_MAX) * 0.5 - 0.25;
         net->hidden_output[i] = 0.0;
     }
     
     for (int i = 0; i < 2; i++) {
         net->output_weights[i] = ((double)rand() / RAND_MAX) * 2.0 - 1.0;
     }
-    net->output_bias = ((double)rand() / RAND_MAX) * 2.0 - 1.0;
+    net->output_bias = ((double)rand() / RAND_MAX) * 0.5 - 0.25;
     net->output = 0.0;
 
     return net;

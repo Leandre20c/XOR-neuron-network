@@ -49,6 +49,13 @@ void train_single_example(XORNetwork* net, XORExample example, double
     net->hidden_weights[1][0] += learning_rate * hidden_error_2 * A;  // w to A
     net->hidden_weights[1][1] += learning_rate * hidden_error_2 * B;  // w to B
     net->hidden_bias[1] += learning_rate * hidden_error_2;
+
+    static int debug_count = 0;
+    if (debug_count < 5) {  // Afficher seulement les 5 premiers
+        printf("Delta output: %.6f\n", output_error);
+        printf("Delta hidden1: %.6f, Delta hidden2: %.6f\n", hidden_error_1, hidden_error_2);
+        debug_count++;
+    }
 }
 
 
