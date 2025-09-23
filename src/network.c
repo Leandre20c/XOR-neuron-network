@@ -65,45 +65,45 @@ double forward_pass(XORNetwork* net, double x1, double x2)
 
 void print_network_state(XORNetwork* net)
 {
-    printf("=== ÉTAT DU RÉSEAU XOR ===\n");
+    printf("=== XOR NETWORK STATE ===\n");
     
     // Entry layer
-    printf("COUCHE CACHÉE:\n");
+    printf("HIDDEN LAYER:\n");
     for (int i = 0; i < 2; i++) {
-        printf("  Neurone H%d:\n", i+1);
-        printf("    Poids: [%.3f, %.3f]\n", 
+        printf("  Neuron H%d:\n", i+1);
+        printf("    Weights: [%.3f, %.3f]\n", 
                net->hidden_weights[i][0], net->hidden_weights[i][1]);
-        printf("    Biais: %.3f\n", net->hidden_bias[i]);
-        printf("    Sortie: %.3f\n", net->hidden_output[i]);
+        printf("    Bias: %.3f\n", net->hidden_bias[i]);
+        printf("    Output: %.3f\n", net->hidden_output[i]);
     }
     
     // Output layer
-    printf("COUCHE SORTIE:\n");
-    printf("  Poids: [%.3f, %.3f]\n", 
+    printf("OUTPUT LAYER:\n");
+    printf("  Weights: [%.3f, %.3f]\n", 
            net->output_weights[0], net->output_weights[1]);
-    printf("  Biais: %.3f\n", net->output_bias);
-    printf("  Sortie: %.3f\n", net->output);
+    printf("  Bias: %.3f\n", net->output_bias);
+    printf("  Output: %.3f\n", net->output);
     
     // Stats
     printf("STATS:\n");
-    printf("  Époques: %d\n", net->training_epochs);
-    printf("  Coût final: %.6f\n", net->final_cost);
+    printf("  Epochs: %d\n", net->training_epochs);
+    printf("  Final cost: %.6f\n", net->final_cost);
     printf("========================\n");
 }
 
 void test_xor_network(XORNetwork* net)
 {
-    printf("Test du réseau XOR:\n");
+    printf("XOR Network tests:\n");
     
     double inputs[4][2] = {{0,0}, {0,1}, {1,0}, {1,1}};
     double expected[4] = {0, 1, 1, 0};
     
     for (int i = 0; i < 4; i++) {
         double result = forward_pass(net, inputs[i][0], inputs[i][1]);
-        printf("  %.0f XOR %.0f = %.3f (attendu: %.0f)\n", 
+        printf("  %.0f XOR %.0f = %.3f (expected: %.0f)\n", 
                inputs[i][0], inputs[i][1], result, expected[i]);
     }
     
     double cost = compute_network_cost(net);
-    printf("  Coût moyen: %.6f\n", cost);
+    printf("  Average cost: %.6f\n", cost);
 }

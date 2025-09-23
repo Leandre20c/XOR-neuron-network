@@ -16,7 +16,7 @@ int main()
     test_xor_network(xor_network);
 
     printf("\nTraining network...\n");
-    train_xor_network(xor_network, 10000, 0.05, 1);
+    train_xor_network(xor_network, 1000000, 0.9, 0);
 
     printf("\nTest after training\n");
     test_xor_network(xor_network);

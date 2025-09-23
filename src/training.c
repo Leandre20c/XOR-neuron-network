@@ -27,12 +27,12 @@ void train_single_example(XORNetwork* net, XORExample example, double
     old_output_weights[1] = net->output_weights[1];
 
     // Ajust output weigts
-    net->output_weights[0] += learning_rate * output_error * net->hidden_output[0];
-    net->output_weights[1] += learning_rate * output_error * net->hidden_output[1];
+    net->output_weights[0] += learning_rate*output_error*net->hidden_output[0];
+    net->output_weights[1] += learning_rate*output_error*net->hidden_output[1];
     net->output_bias += learning_rate * output_error * 1.0;
 
     
-    // == Ajust Hidden Layer
+    // == Ajust Hidden Layer ==
 
     double hidden_error_1 = output_error * old_output_weights[0] *
         sigmoid_derivative(net->hidden_output[0]);
@@ -49,24 +49,20 @@ void train_single_example(XORNetwork* net, XORExample example, double
     net->hidden_weights[1][0] += learning_rate * hidden_error_2 * A;  // w to A
     net->hidden_weights[1][1] += learning_rate * hidden_error_2 * B;  // w to B
     net->hidden_bias[1] += learning_rate * hidden_error_2;
-
-    static int debug_count = 0;
-    if (debug_count < 5) {  // Afficher seulement les 5 premiers
-        printf("Delta output: %.6f\n", output_error);
-        printf("Delta hidden1: %.6f, Delta hidden2: %.6f\n", hidden_error_1, hidden_error_2);
-        debug_count++;
-    }
 }
 
 
 void train_xor_network(XORNetwork* net, int epochs, double learning_rate,
         int verbose)
 {
+    // those values describe XOR, index for index
     double input_map[4][2] = {{0,0}, {0,1}, {1,0}, {1,1}};
     double output_map[4] = {0, 1, 1, 0};
 
     XORExample example;
 
+    // 1 epoch = 1 training cycle
+    // 1 epoch trains the 4 XOR cases
     for (int epoch = 0; epoch < epochs; epoch++)
     {
         for (int i = 0; i < 4; i++)
@@ -79,7 +75,8 @@ void train_xor_network(XORNetwork* net, int epochs, double learning_rate,
             train_single_example(net, example, learning_rate);
         }
 
-        if (verbose && epoch % 1000 == 0) {
+        if (verbose && epoch % 1000 == 0)
+        {
             double cost = compute_network_cost(net);
             printf("Epoch %d, Cost: %.6f\n", epoch, cost);
         }
@@ -108,6 +105,7 @@ double compute_network_cost(XORNetwork* net)
 }
 
 
+// Save and Load features (useless for demo)
 void save_network(XORNetwork* net, const char* filename)
 {
     FILE* file = fopen(filename, "wb");
